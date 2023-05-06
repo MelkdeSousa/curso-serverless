@@ -4,9 +4,10 @@
 - [x] Definir o usuário na maquina com `aws configure`
 - [x] usar [AWS CDK](https://www.npmjs.com/package/aws-cdk): `npx aws-cdk`
 - [x] iniciar um projeto com typescript: `npx aws-cdk init --language typescript`
+- [x] preparar uma conta e região para o CDK: `npx aws-cdk bootstrap`
 - [x] lista de stack dentro do projeto: `npx aws-cdk list`
-- [ ] destruir tudo que já foi feito no projeto: `npx aws-cdk destroy --all`
-- [ ] deploy das stacks: `npx aws-cdk deploy --all`
+- [x] deploy das stacks: `npx aws-cdk deploy --all`
+- [x] destruir tudo que já foi feito no projeto: `npx aws-cdk destroy --all`
 
 ## Conceitos
 
