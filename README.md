@@ -33,3 +33,20 @@
 - Integração com funções lambdas, cognito para autent./autor. de usuários
 - Monitoramento com CloudWatch
 - Custo por Requisição e quantidade de dados transferidos
+
+### Lambda layers
+
+- É o mecanismo de compartilhamento de código entre lambdas
+- Útil para separação de responsabilidade e reutilização de código (Modelo de acesso a dados, lógicas de negócio)
+- A redução de código na lambda ajuda no code start
+
+
+### DynamoDB
+
+- Banco de dados NoSQL
+- Orientado a Documentos
+- Gerenciável, escalável, modos de capacidade
+- itens TTL
+- Autoscaling
+- Chave primária simples, composta e índice
+- schemaless
