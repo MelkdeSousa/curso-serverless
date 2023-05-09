@@ -7,9 +7,9 @@ import {
 } from 'aws-cdk-lib/aws-apigateway'
 import { LogGroup } from 'aws-cdk-lib/aws-logs'
 import { Construct } from 'constructs'
-import { ProductsLambdas } from './types'
+import { AWS } from './types'
 
-export type ECommerclessApiStackProps = StackProps & ProductsLambdas
+export type ECommerclessApiStackProps = StackProps & AWS.ProductsLambdas
 
 export class ECommerclessApiStack extends Stack {
   constructor(

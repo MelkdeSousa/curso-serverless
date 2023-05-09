@@ -15,6 +15,13 @@ export class ProductsStack extends Stack implements AWS.ProductsLambdas {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props)
 
+    const productsFunctionFolder = path.join(
+      __dirname,
+      '..',
+      'lambda',
+      'products',
+    )
+
     this.productsTable = new Table(this, 'ProductsTable', {
       tableName: 'products',
       partitionKey: {
@@ -32,7 +39,7 @@ export class ProductsStack extends Stack implements AWS.ProductsLambdas {
       this,
       'ProductsFetchFunction',
       'products-fetch',
-      path.join(__dirname, '..', 'lambda', 'products', 'fetch.ts'),
+      path.join(productsFunctionFolder, 'fetch.ts'),
       {
         PRODUCTS_TABLE: this.productsTable.tableName,
       },
@@ -44,7 +51,7 @@ export class ProductsStack extends Stack implements AWS.ProductsLambdas {
       this,
       'ProductsAdminFunction',
       'products-admin',
-      path.join(__dirname, '..', 'lambda', 'products', 'admin.ts'),
+      path.join(productsFunctionFolder, 'admin.ts'),
       {
         PRODUCTS_TABLE: this.productsTable.tableName,
       },
