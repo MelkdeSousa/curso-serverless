@@ -17,14 +17,18 @@ const tags = {
 
 const app = new cdk.App()
 
-const productsStack = new ProductsStack(app, 'ProductsStack', {
-  tags,
-  env,
-})
+const productsStack = new ProductsStack(
+  app,
+  `ProductsStack-${process.env.STAGE}`,
+  {
+    tags,
+    env,
+  },
+)
 
 const eCommerclessApiStack = new ECommerclessApiStack(
   app,
-  'ECommerclessApiStack',
+  `ECommerclessApiStack-${process.env.STAGE}`,
   {
     productsFetchFunction: productsStack.productsFetchFunction,
     productsAdminFunction: productsStack.productsAdminFunction,
