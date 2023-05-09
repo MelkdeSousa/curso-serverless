@@ -25,6 +25,7 @@
 - Quando chamadas mais uma vez ao mesmo tempo, são executadas em paralelo
 - Seu custo é calculado por tempo de execução e consumo de memória
 - Elas devem ser feitas com ênfase em performance, toda redução de consumo de memória e tempo devem ser priorizadas
+- Para ter acesso a outros recursos da AWS, é necessário informar quais são eles e quais as operações a serem realizadas neles
 
 ### API Gateway
 

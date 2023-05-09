@@ -5,19 +5,21 @@ import {
   LogGroupLogDestination,
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway'
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { LogGroup } from 'aws-cdk-lib/aws-logs'
 import { Construct } from 'constructs'
+import { ProductsLambdas } from './types'
 
-export interface ECommerclessApiStackProps extends StackProps {
-  productsFetchFunction: NodejsFunction
-}
+export type ECommerclessApiStackProps = StackProps & ProductsLambdas
 
 export class ECommerclessApiStack extends Stack {
   constructor(
     scope: Construct,
     id: string,
-    { productsFetchFunction, ...props }: ECommerclessApiStackProps,
+    {
+      productsFetchFunction,
+      productsAdminFunction,
+      ...props
+    }: ECommerclessApiStackProps,
   ) {
     super(scope, id, props)
 
@@ -47,11 +49,28 @@ export class ECommerclessApiStack extends Stack {
     const productsFetchFunctionIntegration = new LambdaIntegration(
       productsFetchFunction,
     )
+    const productsAdminFunctionIntegration = new LambdaIntegration(
+      productsAdminFunction,
+    )
 
     // api gateway resource "/products"
     const productsResource = api.root.addResource('products')
 
     // api gateway resource "/products" with GET method
     productsResource.addMethod('GET', productsFetchFunctionIntegration)
+
+    const productsIdResource = productsResource.addResource('{id}')
+
+    // api gateway resource "/products/{id}" with GET method
+    productsIdResource.addMethod('GET', productsFetchFunctionIntegration)
+
+    // api gateway resource "/products" with POST method
+    productsResource.addMethod('POST', productsAdminFunctionIntegration)
+
+    // api gateway resource "/products/{id}" with PUT method
+    productsIdResource.addMethod('PUT', productsAdminFunctionIntegration)
+
+    // api gateway resource "/products/{id}" with DELETE method
+    productsIdResource.addMethod('DELETE', productsAdminFunctionIntegration)
   }
 }

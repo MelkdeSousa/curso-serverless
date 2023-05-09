@@ -3,9 +3,12 @@ import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { Construct } from 'constructs'
 import * as path from 'path'
+import { ProductsLambdas } from './types'
 
-export class ProductsStack extends Stack {
+export class ProductsStack extends Stack implements ProductsLambdas {
   readonly productsFetchFunction: NodejsFunction
+  readonly productsAdminFunction: NodejsFunction
+
   readonly productsTable: Table
 
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -29,14 +32,7 @@ export class ProductsStack extends Stack {
       'ProductsFetchFunction',
       {
         functionName: 'products-fetch',
-        entry: path.join(
-          __dirname,
-          '..',
-          'src',
-          'lambda',
-          'products',
-          'fetch.ts',
-        ),
+        entry: path.join(__dirname, '..', 'lambda', 'products', 'fetch.ts'),
         handler: 'handler',
         memorySize: 128,
         timeout: Duration.seconds(5),
@@ -51,5 +47,26 @@ export class ProductsStack extends Stack {
     )
 
     this.productsTable.grantReadData(this.productsFetchFunction)
+
+    this.productsAdminFunction = new NodejsFunction(
+      this,
+      'ProductsAdminFunction',
+      {
+        functionName: 'products-admin',
+        entry: path.join(__dirname, '..', 'lambda', 'products', 'admin.ts'),
+        handler: 'handler',
+        memorySize: 128,
+        timeout: Duration.seconds(5),
+        bundling: {
+          minify: true,
+          sourceMap: false,
+        },
+        environment: {
+          PRODUCTS_TABLE: this.productsTable.tableName,
+        },
+      },
+    )
+
+    this.productsTable.grantWriteData(this.productsAdminFunction)
   }
 }
