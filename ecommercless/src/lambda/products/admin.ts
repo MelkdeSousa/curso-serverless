@@ -1,4 +1,4 @@
-import { AWS } from '../../aws/types'
+import { AWS } from '~/aws/types'
 
 export const handler: AWS.AWSLambda = async (event, context) => {
   console.log(

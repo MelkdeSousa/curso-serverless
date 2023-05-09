@@ -3,7 +3,7 @@ import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { Construct } from 'constructs'
 import * as path from 'path'
-import { makeNodejsFunction } from '../factories/makeNodejsFunction'
+import { makeNodejsFunction } from '~/factories/makeNodejsFunction'
 import { AWS } from './types'
 
 export class ProductsStack extends Stack implements AWS.ProductsLambdas {

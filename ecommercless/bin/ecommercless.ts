@@ -2,8 +2,8 @@
 import * as cdk from 'aws-cdk-lib'
 import 'dotenv/config'
 import 'source-map-support/register'
-import { ECommerclessApiStack } from '../src/aws/ecommercless-api-stack'
-import { ProductsStack } from '../src/aws/products-stack'
+import { ECommerclessApiStack } from '~/aws/ecommercless-api-stack'
+import { ProductsStack } from '~/aws/products-stack'
 
 const env: cdk.Environment = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
