@@ -6,7 +6,7 @@
 - [x] iniciar um projeto com typescript: `npx aws-cdk init --language typescript`
 - [x] preparar uma conta e região para o CDK: `npx aws-cdk bootstrap`
 - [x] lista de stack dentro do projeto: `npx aws-cdk list`
-- [x] deploy das stacks: `npx aws-cdk deploy --all`
+- [x] deploy das stacks: `npx aws-cdk deploy --all`; pode usar as flag `--require-approval never` para evitar perguntas
 - [x] destruir tudo que já foi feito no projeto: `npx aws-cdk destroy --all`
 
 ## Conceitos

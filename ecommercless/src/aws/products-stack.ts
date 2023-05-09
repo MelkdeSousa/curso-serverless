@@ -1,11 +1,12 @@
-import { Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib'
+import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib'
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { Construct } from 'constructs'
 import * as path from 'path'
-import { ProductsLambdas } from './types'
+import { makeNodejsFunction } from '../factories/makeNodejsFunction'
+import { AWS } from './types'
 
-export class ProductsStack extends Stack implements ProductsLambdas {
+export class ProductsStack extends Stack implements AWS.ProductsLambdas {
   readonly productsFetchFunction: NodejsFunction
   readonly productsAdminFunction: NodejsFunction
 
@@ -27,43 +28,25 @@ export class ProductsStack extends Stack implements ProductsLambdas {
       writeCapacity: 1,
     })
 
-    this.productsFetchFunction = new NodejsFunction(
+    this.productsFetchFunction = makeNodejsFunction(
       this,
       'ProductsFetchFunction',
+      'products-fetch',
+      path.join(__dirname, '..', 'lambda', 'products', 'fetch.ts'),
       {
-        functionName: 'products-fetch',
-        entry: path.join(__dirname, '..', 'lambda', 'products', 'fetch.ts'),
-        handler: 'handler',
-        memorySize: 128,
-        timeout: Duration.seconds(5),
-        bundling: {
-          minify: true,
-          sourceMap: false,
-        },
-        environment: {
-          PRODUCTS_TABLE: this.productsTable.tableName,
-        },
+        PRODUCTS_TABLE: this.productsTable.tableName,
       },
     )
 
     this.productsTable.grantReadData(this.productsFetchFunction)
 
-    this.productsAdminFunction = new NodejsFunction(
+    this.productsAdminFunction = makeNodejsFunction(
       this,
       'ProductsAdminFunction',
+      'products-admin',
+      path.join(__dirname, '..', 'lambda', 'products', 'admin.ts'),
       {
-        functionName: 'products-admin',
-        entry: path.join(__dirname, '..', 'lambda', 'products', 'admin.ts'),
-        handler: 'handler',
-        memorySize: 128,
-        timeout: Duration.seconds(5),
-        bundling: {
-          minify: true,
-          sourceMap: false,
-        },
-        environment: {
-          PRODUCTS_TABLE: this.productsTable.tableName,
-        },
+        PRODUCTS_TABLE: this.productsTable.tableName,
       },
     )
 
