@@ -1,6 +1,8 @@
 import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib'
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
+import { LayerVersion } from 'aws-cdk-lib/aws-lambda'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
+import { StringParameter } from 'aws-cdk-lib/aws-ssm'
 import { Construct } from 'constructs'
 import * as path from 'path'
 import { makeNodejsFunction } from '~/factories/makeNodejsFunction'
@@ -35,6 +37,18 @@ export class ProductsStack extends Stack implements AWS.ProductsLambdas {
       writeCapacity: 1,
     })
 
+    const productsLayerArn = StringParameter.valueForStringParameter(
+      this,
+      'ProductsLayerVersionArn',
+    )
+    const productsLayer = LayerVersion.fromLayerVersionArn(
+      this,
+      'Products:ayerVersionArn',
+      productsLayerArn,
+    )
+
+    const layers = [productsLayer]
+
     this.productsFetchFunction = makeNodejsFunction(
       this,
       'ProductsFetchFunction',
@@ -43,6 +57,7 @@ export class ProductsStack extends Stack implements AWS.ProductsLambdas {
       {
         PRODUCTS_TABLE: this.productsTable.tableName,
       },
+      layers,
     )
 
     this.productsTable.grantReadData(this.productsFetchFunction)
@@ -55,6 +70,7 @@ export class ProductsStack extends Stack implements AWS.ProductsLambdas {
       {
         PRODUCTS_TABLE: this.productsTable.tableName,
       },
+      layers,
     )
 
     this.productsTable.grantWriteData(this.productsAdminFunction)

@@ -1,4 +1,5 @@
 import { Duration } from 'aws-cdk-lib'
+import { ILayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { Construct } from 'constructs'
 
@@ -8,6 +9,7 @@ export const makeNodejsFunction = (
   name: string,
   path: string,
   environment: Record<string, string> = {},
+  layers: ILayerVersion[] = [],
 ): NodejsFunction => {
   return new NodejsFunction(scope, id, {
     functionName: name,
@@ -19,6 +21,8 @@ export const makeNodejsFunction = (
       minify: true,
       sourceMap: false,
     },
+    runtime: Runtime.NODEJS_16_X,
     environment,
+    layers,
   })
 }

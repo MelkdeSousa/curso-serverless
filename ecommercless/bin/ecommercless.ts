@@ -2,8 +2,7 @@
 import * as cdk from 'aws-cdk-lib'
 import 'dotenv/config'
 import 'source-map-support/register'
-import { ECommerclessApiStack } from '~/aws/ecommercless-api-stack'
-import { ProductsStack } from '~/aws/products-stack'
+import { ECommerclessApiStack, ProductsLayersStack, ProductsStack } from '~/aws'
 
 const env: cdk.Environment = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
@@ -17,6 +16,15 @@ const tags = {
 
 const app = new cdk.App()
 
+const productsLayersStack = new ProductsLayersStack(
+  app,
+  `ProductsLayersStack-${process.env.STAGE}`,
+  {
+    tags,
+    env,
+  },
+)
+
 const productsStack = new ProductsStack(
   app,
   `ProductsStack-${process.env.STAGE}`,
@@ -25,6 +33,8 @@ const productsStack = new ProductsStack(
     env,
   },
 )
+
+productsStack.addDependency(productsLayersStack)
 
 const eCommerclessApiStack = new ECommerclessApiStack(
   app,
